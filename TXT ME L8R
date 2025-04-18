@@ -1,0 +1,75 @@
+from pydub import AudioSegment
+
+from pydub.generators import Sine
+
+
+
+# Define beat timing and structure again for demo purposes
+
+bpm = 112
+
+beat_duration_ms = 60000 // bpm
+
+
+
+# Build layered demo using slightly more variation in tone and rhythm
+
+# Create drum-like pulses and melodic tones
+
+
+
+# Drum kick pulse (low tone)
+
+kick = Sine(60).to_audio_segment(duration=100).fade_out(50)
+
+kick_pattern = kick + AudioSegment.silent(duration=beat_duration_ms - 100)
+
+kick_loop = kick_pattern * 8
+
+
+
+# Snare (sharp tone)
+
+snare = Sine(400).to_audio_segment(duration=50).fade_out(30)
+
+snare_pattern = AudioSegment.silent(duration=beat_duration_ms // 2) + snare + AudioSegment.silent(duration=(beat_duration_ms // 2) - 50)
+
+snare_loop = snare_pattern * 8
+
+
+
+# Melody - simple arpeggio pattern
+
+melody = AudioSegment.silent(duration=0)
+
+for freq in [660, 880, 990, 880]:
+
+    melody += Sine(freq).to_audio_segment(duration=beat_duration_ms // 2).fade_in(20).fade_out(50)
+
+
+
+melody_loop = melody * 4
+
+
+
+# Bassline - steady low tone pulses
+
+bass = Sine(110).to_audio_segment(duration=beat_duration_ms).fade_out(50)
+
+bass_loop = bass * 8
+
+
+
+# Combine all layers
+
+demo_mix = kick_loop.overlay(snare_loop).overlay(melody_loop).overlay(bass_loop)
+
+
+
+# Export the audio demo
+
+demo_path = "/mnt/data/TXT_ME_L8R_audio_demo.mp3"
+
+demo_mix.export(demo_path, format="mp3")
+
+demo_path
